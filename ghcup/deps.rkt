@@ -5,11 +5,3 @@
 )
 
 (system "apt-get install libgmp-dev")
-
-(system 
-  "wget -c https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-)
-
-(system 
-  "git clone https://github.com/hasktorch/hasktorch.git"
-)
