@@ -1,8 +1,26 @@
 #lang racket 
+(require racket/cmdline)
+(require racket/match)
 
-(system 
-  "sudo apt-get install bubblewrap"
-)
+(define sys "none")
+(command-line
+ #:program "emacs-install"
+ #:once-each
+ [("-s") s "system" (set! sys s)])
+
+(match sys
+  ("ubuntu"
+   (begin
+     (display "ubuntu linux")
+     (system "sudo apt-get install -y bubblewrap")
+     ))
+  ("rocky"
+   (begin
+     (display "rocky linux")
+     (system "sudo yum install -y bubblewrap")))
+  (_
+   (display "system not recognized")))
+
 
 (system 
   "bash -c \"sh <(curl -fsSL https://opam.ocaml.org/install.sh)\""

@@ -4,13 +4,40 @@
                          ("melpa" . "https://mirrors.ustc.edu.cn/elpa/melpa/")
                          ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
+(setq package-list
+			'(corfu
+				cape
+				use-package
+				auto-highlight-symbol
+				auto-complete
+				highlight-parentheses
+				clipmon
+				highlight-indent-guides
+				go-mode
+				haskell-mode
+				futhark-mode
+				racket-mode
+				tuareg
+				julia-mode
+				rust-mode
+				markdown-mode
+				elixir-mode
+				scala-mode
+				))
+
+(package-initialize)
+(dolist (package package-list)
+  (unless (package-installed-p package)
+	  (package-refresh-contents)
+	  (package-install package)))
+
 ;;; -*- lexical-binding: t -*-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(auto-highlight-symbol)))
+ '(package-selected-packages '(auto-highlight-symbol cape corfu)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -52,3 +79,5 @@
 (define-key global-map (kbd "C-x C-g") 'beginning-of-buffer)
 
 (setq make-backup-files nil) ; stop creating ~ files
+
+(corfu-mode t)

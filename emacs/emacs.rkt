@@ -16,7 +16,7 @@
   ("rocky"
    (begin
      (display "rocky linux")
-   (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel")))
+     (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel")))
   (_
    (display "system not recognized")))
 
@@ -25,4 +25,4 @@
 
 (system "cd emacs-30.2 && ./configure && make -j4 && sudo make install")
 (system "cp .emacs ~/")
-(system "emacs --script emacs_install.el")
+;; (system "emacs --script emacs_install.el")
