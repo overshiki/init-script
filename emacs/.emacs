@@ -80,4 +80,8 @@
 
 (setq make-backup-files nil) ; stop creating ~ files
 
-(corfu-mode t)
+(global-corfu-mode)
+(corfu-popupinfo-mode)
+(setq corfu-terminal t)
+(add-to-list 'completion-at-point-functions #'cape-file)
+(add-to-list 'completion-at-point-functions #'cape-dabbrev)
