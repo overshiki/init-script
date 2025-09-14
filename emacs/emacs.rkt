@@ -4,9 +4,9 @@
 
 (define sys "none")
 (command-line
- #:program "emacs-install"
- #:once-each
- [("-s") s "system" (set! sys s)])
+   #:program "emacs-install"
+   #:once-each
+   [("-s") s "system" (set! sys s)])
 
 (match sys
   ("ubuntu"
