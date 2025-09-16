@@ -47,13 +47,26 @@
   (_
    (display "system not recognized")))
 
-
+(define (chain . xs)
+  (define (fchain xs)
+    (match xs
+     [(cons x '()) x]
+     [(cons x xxs)
+            (string-append x " && " (fchain xxs))]
+     ['() "" ]
+     ))
+  (fchain xs)
+)
+  
 (system (string-append "wget -c " gcc-link))
-(system (string-append "tar -xvf " gcc-tar))
-(system (string-append
-         "cd "
-         gcc-name
-         " && "
-         "./configure --disable-multilib"
-         " && "
-         "make -j4"))
+(if (directory-exists? gcc-name)
+    '()
+    (system (string-append "tar -xvf " gcc-tar)))
+
+(system
+  (chain
+    (string-append "cd " gcc-name)
+    "./configure --disable-multilib"
+    "make -j4"))
+
+ 
