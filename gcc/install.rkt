@@ -1,4 +1,5 @@
 #lang racket
+(require "../lib.rkt")
 (require racket/cmdline)
 (require racket/match)
 
@@ -47,16 +48,16 @@
   (_
    (display "system not recognized")))
 
-(define (chain . xs)
-  (define (fchain xs)
-    (match xs
-     [(cons x '()) x]
-     [(cons x xxs)
-            (string-append x " && " (fchain xxs))]
-     ['() "" ]
-     ))
-  (fchain xs)
-)
+;; (define (chain . xs)
+;;   (define (fchain xs)
+;;     (match xs
+;;      [(cons x '()) x]
+;;      [(cons x xxs)
+;;             (string-append x " && " (fchain xxs))]
+;;      ['() "" ]
+;;      ))
+;;   (fchain xs)
+;; )
   
 (system (string-append "wget -c " gcc-link))
 (if (directory-exists? gcc-name)
