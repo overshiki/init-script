@@ -7,6 +7,7 @@
 (setq package-list
 			'(corfu
 				cape
+				jedi
 				use-package
 				auto-highlight-symbol
 				auto-complete
@@ -40,7 +41,7 @@
  '(package-selected-packages
 	 '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
 									 futhark-mode go-mode haskell-mode
-									 highlight-indent-guides highlight-parentheses
+									 highlight-indent-guides highlight-parentheses jedi
 									 julia-mode markdown-mode racket-mode rust-mode
 									 scala-mode toggle-term tuareg)))
 (custom-set-faces
@@ -49,6 +50,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(add-hook 'python-mode-hook 'jedi:setup)
 
 ;; https://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 (global-auto-complete-mode t)
