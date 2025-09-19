@@ -37,13 +37,25 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(auto-highlight-symbol cape corfu)))
+ '(package-selected-packages
+	 '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
+									 futhark-mode go-mode haskell-mode
+									 highlight-indent-guides highlight-parentheses
+									 julia-mode markdown-mode racket-mode rust-mode
+									 scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; https://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
+(global-auto-complete-mode t)
+(defun auto-complete-mode-maybe ()
+  "No maybe for you. Only AC!"
+  (unless (minibufferp (current-buffer))
+    (auto-complete-mode 1)))
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
@@ -73,10 +85,13 @@
   (newline-and-indent))
 
 (define-key global-map (kbd "C-o") 'end-of-line-and-indented-new-line)
-(define-key global-map (kbd "C-.") 'find-file)
+;; (define-key global-map (kbd "C-.") 'find-file)
 (define-key global-map (kbd "C-z") 'undo)
 (define-key global-map (kbd "C-x C-e") 'end-of-buffer)
 (define-key global-map (kbd "C-x C-g") 'beginning-of-buffer)
+
+(define-key global-map (kbd "C-j") 'comment-line)
+
 
 (setq make-backup-files nil) ; stop creating ~ files
 
@@ -85,3 +100,54 @@
 (setq corfu-terminal t)
 (add-to-list 'completion-at-point-functions #'cape-file)
 (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+
+
+(global-hl-line-mode 1)
+(set-face-attribute 'hl-line nil :foreground nil)
+
+(defun xah-select-line ()
+  (interactive)
+  (if (region-active-p)
+      (if visual-line-mode
+          (let ((xp1 (point)))
+            (end-of-visual-line 1)
+            (when (eq xp1 (point))
+              (end-of-visual-line 2)))
+        (progn
+          (forward-line 1)
+          (end-of-line)))
+    (if visual-line-mode
+        (progn (beginning-of-visual-line)
+               (push-mark (point) t t)
+               (end-of-visual-line))
+      (progn
+        (push-mark (line-beginning-position) t t)
+        (end-of-line)))))
+
+(global-set-key (kbd "C-l") 'xah-select-line)
+
+(defun xah-forward-block (&optional n)
+  (interactive "p")
+  (let ((n (if (null n) 1 n)))
+    (re-search-forward "\n[\t\n ]*\n+" nil "NOERROR" n)))
+
+(global-set-key (kbd "M-n") 'xah-forward-block)
+
+(defun xah-backward-block (&optional n)
+  "Move cursor to previous text block.
+See: `xah-forward-block'
+URL `http://xahlee.info/emacs/emacs/emacs_move_by_paragraph.html'
+Version 2016-06-15"
+  (interactive "p")
+  (let ((n (if (null n) 1 n))
+        ($i 1))
+    (while (<= $i n)
+      (if (re-search-backward "\n[\t\n ]*\n+" nil "NOERROR")
+          (progn (skip-chars-backward "\n\t "))
+        (progn (goto-char (point-min))
+               (setq $i n)))
+      (setq $i (1+ $i)))))
+
+(global-set-key (kbd "M-p") 'xah-backward-block)
+
+
