@@ -4,3 +4,5 @@ cmake/cmake-*
 gcc/gcc-*
 emacs/emacs-30.2*
 modules/modules-*
+racket/racket-8.18-x86_64-linux-buster-cs.sh
+python/*.sh
