@@ -8,6 +8,7 @@
 			'(corfu
 				cape
 				jedi
+				multiple-cursors
 				use-package
 				auto-highlight-symbol
 				auto-complete
@@ -42,8 +43,8 @@
 	 '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
 									 futhark-mode go-mode haskell-mode
 									 highlight-indent-guides highlight-parentheses jedi
-									 julia-mode markdown-mode racket-mode rust-mode
-									 scala-mode toggle-term tuareg)))
+									 julia-mode markdown-mode multiple-cursors
+									 racket-mode rust-mode scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -153,4 +154,8 @@ Version 2016-06-15"
 
 (global-set-key (kbd "M-p") 'xah-backward-block)
 
+(require 'multiple-cursors)
 
+(global-set-key (kbd "C-d") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
