@@ -231,4 +231,4 @@ This command does not push erased text to kill-ring."
 (define-key global-map (kbd "C-x p") 'previous-buffer)
 (define-key global-map (kbd "C-x n") 'next-buffer)
 
-(define-key global-map (kbd "C-M-]") 'term-toggle-ansi)
+(define-key global-map (kbd "C-M-]") 'term-toggle-shell)
