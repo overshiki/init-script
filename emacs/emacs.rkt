@@ -3,26 +3,45 @@
 (require racket/match)
 
 (define sys "none")
+(define mode "none")
 (command-line
    #:program "emacs-install"
    #:once-each
-   [("-s") s "system" (set! sys s)])
+   [("-s") s "system" (set! sys s)]
+   [("-m") m "full" (set! mode m)]
+   )
 
-(match sys
-  ("ubuntu"
-   (begin
-     (display "ubuntu linux")
-     (system "sudo apt-get install -y libgnutls28-dev libtinfo-dev pkg-config")))
-  ("rocky"
-   (begin
-     (display "rocky linux")
-     (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel")))
-  (_
-   (display "system not recognized")))
+(define is-post
+  (match mode
+    ("post" #t)
+    ("full" #f)
+    )
+  )
 
-(system "wget -c https://mirror.ossplanet.net/gnu/emacs/emacs-30.2.tar.xz")
-(system "tar -xvf emacs-30.2.tar.xz")
+(when (not is-post) 
+   (match sys
+     ("ubuntu"
+      (begin
+        (display "ubuntu linux")
+        (system "sudo apt-get update")
+        (system "sudo apt-get install -y libgnutls28-dev libtinfo-dev pkg-config libgccjit-12-dev")))
+     ("rocky"
+      (begin
+        (display "rocky linux")
+        (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel")))
+     (_
+      (display "system not recognized")))
+   (system "wget -c https://mirror.ossplanet.net/gnu/emacs/emacs-30.2.tar.xz")
+   (system "tar -xvf emacs-30.2.tar.xz")
+   (system "cd emacs-30.2 && ./configure && make -j4 && sudo make install")
+   )
 
-(system "cd emacs-30.2 && ./configure && make -j4 && sudo make install")
+
+(when (not (directory-exists? "deps"))
+  (system "mkdir deps")
+  (system "cd deps && git clone https://github.com/amno1/emacs-term-toggle.git")
+  )
+ 
+(system "emacs --script install.el")
+
 (system "cp .emacs ~/")
-;; (system "emacs --script emacs_install.el")

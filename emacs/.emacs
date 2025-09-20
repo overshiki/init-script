@@ -15,6 +15,7 @@
 				highlight-parentheses
 				clipmon
 				highlight-indent-guides
+				doom-themes
 				go-mode
 				haskell-mode
 				futhark-mode
@@ -50,6 +51,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 160 :width normal))))
  )
 
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -60,6 +62,8 @@
   "No maybe for you. Only AC!"
   (unless (minibufferp (current-buffer))
     (auto-complete-mode 1)))
+
+(load-theme 'doom-dark+)
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
@@ -160,3 +164,71 @@ Version 2016-06-15"
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-i") 'kill-ring-save)
+
+
+;; https://stackoverflow.com/questions/28221079/ctrl-backspace-in-emacs-deletes-too-much
+;; https://www.reddit.com/r/emacs/comments/2ny06e/delete_text_not_kill_it_into_killring/
+(defun my-delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With argument, do this that many times.
+This command does not push erased text to kill-ring."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+(defun my-backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument, do this that many times.
+This command does not push erased text to kill-ring."
+  (interactive "p")
+  (my-delete-word (- arg)))
+
+(global-set-key [C-backspace] 'my-backward-delete-word)
+
+
+(defun move-text-internal (arg)
+  (cond
+   ((and mark-active transient-mark-mode)
+    (if (> (point) (mark))
+        (exchange-point-and-mark))
+    (let ((column (current-column))
+          (text (delete-and-extract-region (point) (mark))))
+      (forward-line arg)
+      (move-to-column column t)
+      (set-mark (point))
+      (insert text)
+      (exchange-point-and-mark)
+      (setq deactivate-mark nil)))
+   (t
+    (let ((column (current-column)))
+      (beginning-of-line)
+      (when (or (> arg 0) (not (bobp)))
+        (forward-line)
+        (when (or (< arg 0) (not (eobp)))
+          (transpose-lines arg))
+        (forward-line -1))
+      (move-to-column column t)))))
+
+(defun move-text-down (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines down."
+  (interactive "*p")
+  (move-text-internal arg))
+
+(defun move-text-up (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines up."
+  (interactive "*p")
+  (move-text-internal (- arg)))
+
+(provide 'move-text)
+
+(global-set-key (kbd "C-S-P") 'move-text-up)
+(global-set-key (kbd "C-S-N") 'move-text-down)
+
+(global-set-key (kbd "<M-up>") 'move-text-up)
+(global-set-key (kbd "<M-down>") 'move-text-down)
+
+(define-key global-map (kbd "C-x p") 'previous-buffer)
+(define-key global-map (kbd "C-x n") 'next-buffer)
+
+(define-key global-map (kbd "C-M-]") 'term-toggle-eshell)
