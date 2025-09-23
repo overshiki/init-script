@@ -17,7 +17,7 @@
         highlight-indent-guides
         swiper-helm
         lsp-haskell
-        doom-themes
+        ;; doom-themes
         go-mode
         haskell-mode
         futhark-mode
@@ -65,7 +65,7 @@
   (unless (minibufferp (current-buffer))
     (auto-complete-mode 1)))
 
-(load-theme 'doom-dark+)
+;; (load-theme 'doom-dark+)
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
@@ -167,7 +167,7 @@ Version 2016-06-15"
 (global-set-key (kbd "C-d") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-;; (global-set-key (kbd "C-i") 'kill-ring-save)
+(global-set-key (kbd "C-i") 'kill-ring-save)
 
 
 ;; https://stackoverflow.com/questions/28221079/ctrl-backspace-in-emacs-deletes-too-much
@@ -257,8 +257,8 @@ This command does not push erased text to kill-ring."
 (define-key global-map (kbd "C-x C-s") 'swiper-thing-at-point)
 (define-key global-map (kbd "C-s") 'save-buffer)
 
-(define-key global-map (kbd "C-k") 'kill-region)
-(define-key global-map (kbd "M-k") 'kill-line)
+(define-key global-map (kbd "C-k") 'kill-line)
+(define-key global-map (kbd "M-k") 'kill-region)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
 (setq-default indent-tabs-mode nil)
 								
