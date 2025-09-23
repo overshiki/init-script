@@ -5,35 +5,36 @@
                          ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
 (setq package-list
-			'(corfu
-				cape
-				jedi
-				multiple-cursors
-				use-package
-				auto-highlight-symbol
-				auto-complete
-				highlight-parentheses
-				clipmon
-				highlight-indent-guides
-				swiper-helm
-				doom-themes
-				go-mode
-				haskell-mode
-				futhark-mode
-				racket-mode
-				tuareg         ;;; ocaml
-				julia-mode
-				rust-mode
-				markdown-mode
-				elixir-mode
-				scala-mode
-				))
+      '(corfu
+        cape
+        jedi
+        multiple-cursors
+        use-package
+        auto-highlight-symbol
+        auto-complete
+        highlight-parentheses
+        clipmon
+        highlight-indent-guides
+        swiper-helm
+        lsp-haskell
+        doom-themes
+        go-mode
+        haskell-mode
+        futhark-mode
+        racket-mode
+        tuareg         ;;; ocaml
+        julia-mode
+        rust-mode
+        markdown-mode
+        elixir-mode
+        scala-mode
+        ))
 
 (package-initialize)
 (dolist (package package-list)
   (unless (package-installed-p package)
-	  (package-refresh-contents)
-	  (package-install package)))
+    (package-refresh-contents)
+    (package-install package)))
 
 ;;; -*- lexical-binding: t -*-
 (custom-set-variables
@@ -42,11 +43,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-	 '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
-									 futhark-mode go-mode haskell-mode
-									 highlight-indent-guides highlight-parentheses jedi
-									 julia-mode markdown-mode multiple-cursors
-									 racket-mode rust-mode scala-mode toggle-term tuareg)))
+   '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
+                   futhark-mode go-mode haskell-mode
+                   highlight-indent-guides highlight-parentheses jedi
+                   julia-mode markdown-mode multiple-cursors
+                   racket-mode rust-mode scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -55,7 +56,7 @@
  '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 170 :width normal))))
  )
 
-(add-hook 'python-mode-hook 'jedi:setup)
+;; (add-hook 'python-mode-hook 'jedi:setup)
 
 ;; https://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 (global-auto-complete-mode t)
@@ -86,7 +87,7 @@
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 (global-auto-highlight-symbol-mode t)
 
-(define-key global-map (kbd "C-;") 'comment-line)
+;; (define-key global-map (kbd "C-;") 'comment-line)
 
 (defun end-of-line-and-indented-new-line ()
   (interactive)
@@ -166,7 +167,7 @@ Version 2016-06-15"
 (global-set-key (kbd "C-d") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-i") 'kill-ring-save)
+;; (global-set-key (kbd "C-i") 'kill-ring-save)
 
 
 ;; https://stackoverflow.com/questions/28221079/ctrl-backspace-in-emacs-deletes-too-much
@@ -231,6 +232,21 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "<M-up>") 'move-text-up)
 (global-set-key (kbd "<M-down>") 'move-text-down)
 
+
+;; language servers
+(require 'lsp)
+(require 'lsp-haskell)
+;; Hooks so haskell and literate haskell major modes trigger LSP setup
+(add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'haskell-literate-mode-hook #'lsp)
+
+;; auto-complete
+(add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
+(add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'haskell-interactive-mode))
+
+
 (define-key global-map (kbd "C-x p") 'previous-buffer)
 (define-key global-map (kbd "C-x n") 'next-buffer)
 (define-key global-map (kbd "C-x C-p") 'previous-buffer)
@@ -238,4 +254,29 @@ This command does not push erased text to kill-ring."
 
 (define-key global-map (kbd "C-M-]") 'term-toggle-shell)
 
-(define-key global-map (kbd "C-s") 'swiper-thing-at-point)
+(define-key global-map (kbd "C-x C-s") 'swiper-thing-at-point)
+(define-key global-map (kbd "C-s") 'save-buffer)
+
+(define-key global-map (kbd "C-k") 'kill-region)
+(define-key global-map (kbd "M-k") 'kill-line)
+(global-set-key (kbd "TAB") 'tab-to-tab-stop)
+(setq-default indent-tabs-mode nil)
+								
+;; (global-whitespace-mode 1)
+
+;; https://emacs.stackexchange.com/questions/26417/custom-c-arrow-cursor-movement
+(setq separators-regexp "[\-'\"();:,.\\/?!@#%&*+=]")
+(defun forward-to-separator()
+    "Move to the next separator like in the every NORMAL editor"
+    (interactive)
+    (let ((my-pos (re-search-forward separators-regexp)))
+        (goto-char my-pos)))
+
+(defun backward-to-separator()
+    "Move to the previous separator like in the every NORMAL editor"
+    (interactive)
+    (let ((my-pos (re-search-backward separators-regexp)))
+        (goto-char my-pos)))
+
+(global-set-key (kbd "C-<right>") 'forward-to-separator)
+(global-set-key (kbd "C-<left>") 'backward-to-separator)

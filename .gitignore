@@ -7,3 +7,4 @@ emacs/deps
 modules/modules-*
 racket/racket-8.18-x86_64-linux-buster-cs.sh
 python/*.sh
+siesta/siesta-*
