@@ -8,6 +8,7 @@
       '(corfu
         cape
         jedi
+        company
         multiple-cursors
         use-package
         auto-highlight-symbol
@@ -58,13 +59,15 @@
 
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 
-;; https://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
-(global-auto-complete-mode t)
-(defun auto-complete-mode-maybe ()
-  "No maybe for you. Only AC!"
-  (unless (minibufferp (current-buffer))
-    (auto-complete-mode 1)))
+;; use company instead of this
+;; ;; https://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
+;; (global-auto-complete-mode t)
+;; (defun auto-complete-mode-maybe ()
+;;   "No maybe for you. Only AC!"
+;;   (unless (minibufferp (current-buffer))
+;;     (auto-complete-mode 1)))
 
+;; I prefer no theme in the end
 ;; (load-theme 'doom-dark+)
 
 (tab-bar-mode t)
@@ -107,11 +110,12 @@
 
 (setq make-backup-files nil) ; stop creating ~ files
 
-(global-corfu-mode)
-(corfu-popupinfo-mode)
-(setq corfu-terminal t)
-(add-to-list 'completion-at-point-functions #'cape-file)
-(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+;; use company instead of this
+;; (global-corfu-mode)
+;; (corfu-popupinfo-mode)
+;; (setq corfu-terminal t)
+;; (add-to-list 'completion-at-point-functions #'cape-file)
+;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
 
 
 (global-hl-line-mode 1)
@@ -167,7 +171,7 @@ Version 2016-06-15"
 (global-set-key (kbd "C-d") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-(global-set-key (kbd "C-i") 'kill-ring-save)
+;; (global-set-key (kbd "C-i") 'kill-ring-save)
 
 
 ;; https://stackoverflow.com/questions/28221079/ctrl-backspace-in-emacs-deletes-too-much
@@ -233,18 +237,19 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "<M-down>") 'move-text-down)
 
 
-;; language servers
-(require 'lsp)
-(require 'lsp-haskell)
-;; Hooks so haskell and literate haskell major modes trigger LSP setup
-(add-hook 'haskell-mode-hook #'lsp)
-(add-hook 'haskell-literate-mode-hook #'lsp)
+;; use eglot instead
+;; ;; language servers
+;; (require 'lsp)
+;; (require 'lsp-haskell)
+;; ;; Hooks so haskell and literate haskell major modes trigger LSP setup
+;; (add-hook 'haskell-mode-hook #'lsp)
+;; (add-hook 'haskell-literate-mode-hook #'lsp)
 
-;; auto-complete
-(add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
-(add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'haskell-interactive-mode))
+;; ;; auto-complete
+;; (add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
+;; (add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
+;; (eval-after-load "auto-complete"
+;;   '(add-to-list 'ac-modes 'haskell-interactive-mode))
 
 
 (define-key global-map (kbd "C-x p") 'previous-buffer)
@@ -280,3 +285,16 @@ This command does not push erased text to kill-ring."
 
 (global-set-key (kbd "C-<right>") 'forward-to-separator)
 (global-set-key (kbd "C-<left>") 'backward-to-separator)
+(global-set-key (kbd "M-f") 'forward-to-separator)
+(global-set-key (kbd "M-b") 'backward-to-separator)
+
+(ivy-mode t)
+(company-mode t)  ;; auto-completion
+(add-hook 'after-init-hook 'global-company-mode)
+
+(add-hook 'haskell-mode-hook 'eglot-ensure)
+(add-hook 'haskell-cabal-mode-hook 'eglot-ensure)
+(add-hook 'racket-mode-hook 'eglot-ensure)
+
+(setopt ivy-use-selectable-prompt t)
+(global-git-gutter-mode +1)
