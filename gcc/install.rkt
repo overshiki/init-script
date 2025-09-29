@@ -59,4 +59,11 @@
     "./configure --disable-multilib"
     "make -j$nproc"))
 
- 
+(system 
+  "make install")
+(system 
+  "make install-target-libstdc++-v3")
+
+;; to check libstdc++ version
+;; /sbin/ldconfig -p | grep stdc++
+;; strings /usr/lib/libstdc++.so.6 | grep LIBCXX
