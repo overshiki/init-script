@@ -28,9 +28,12 @@
      ("rocky"
       (begin
         (display "rocky linux")
-        (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel")))
+        (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel zlib zlib-devel libgccjit libgccjit-devel")))
+     ;; nothing matched
      (_
-      (display "system not recognized")))
+      (display "system not recognized"))
+      (raise 'failed #t)
+     )
    (system "wget -c https://mirror.ossplanet.net/gnu/emacs/emacs-30.2.tar.xz")
    (system "tar -xvf emacs-30.2.tar.xz")
    (system "cd emacs-30.2 && ./configure && make -j4 && sudo make install")

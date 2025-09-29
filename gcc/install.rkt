@@ -16,7 +16,7 @@
   ("15.2.0" '())
   ("11.4.0" '())
   ("10.1.0" '())
-  (_ (raise 'failed #t)))
+  (_ (raise "use -v to set version; currently supported versions are: 15.2.0 11.4.0 10.1.0" #t)))
 
 (define gcc-name
   (string-append
