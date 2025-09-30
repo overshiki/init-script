@@ -1,0 +1,3 @@
+#lang racket
+
+(system "wget -c https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.8.tar.gz")
