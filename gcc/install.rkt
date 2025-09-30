@@ -12,12 +12,14 @@
  [("-v") v "15.2.0" (set! version v)]
 )
 
-;; (match version
-;;   ("15.2.0" '())
-;;   ("11.4.0" '())
-;;   ("10.1.0" '())
-;;   ("14.1.0" '())
-;;   (_ (raise "use -v to set version; currently supported versions are: 15.2.0 11.4.0 10.1.0" #t)))
+(match version
+  ("15.2.0" '())
+  ("14.1.0" '())
+  ("13.1.0" '())
+  ("12.1.0" '())
+  ("11.4.0" '())
+  ("10.1.0" '())
+  (_ (raise "use -v to set version; currently supported versions are: 15.2.0 11.4.0 10.1.0" #t)))
 
 (define gcc-name
   (string-append

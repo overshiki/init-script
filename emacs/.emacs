@@ -259,8 +259,8 @@ This command does not push erased text to kill-ring."
 
 (define-key global-map (kbd "C-M-]") 'term-toggle-shell)
 
-(define-key global-map (kbd "C-x C-s") 'swiper-thing-at-point)
-(define-key global-map (kbd "C-s") 'save-buffer)
+(define-key global-map (kbd "C-s") 'swiper-thing-at-point)
+;; (define-key global-map (kbd "C-s") 'save-buffer)
 
 (define-key global-map (kbd "C-k") 'kill-line)
 (define-key global-map (kbd "M-k") 'kill-region)
