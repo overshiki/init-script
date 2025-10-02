@@ -41,17 +41,26 @@
   ("ubuntu"
    (begin
      (display "ubuntu linux")
-     (system "apt-get install -y libgmp-dev libmpc-dev libmpfr-dev")
+     (apt-get
+      "libgmp-dev"
+      "libmpc-dev"
+      "libmpfr-dev")
      ))
   ("rocky"
    (begin
      (display "rocky linux")
-     (system "yum install -y gmp-devel libmpc libmpc-devel mpfr-devel gcc-c++")
+     (yum-install
+      "gmp-devel"
+      "libmpc"
+      "libmpc-devel"
+      "mpfr-devel"
+      "gcc-c++")
      ))
   (_
    (display "system not recognized")))
-  
-(system (string-append "wget -c " gcc-link))
+
+(wget gcc-link)
+
 (if (directory-exists? gcc-name)
     '()
     (system (string-append "tar -xvf " gcc-tar)))

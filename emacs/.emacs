@@ -298,3 +298,7 @@ This command does not push erased text to kill-ring."
 
 (setopt ivy-use-selectable-prompt t)
 (global-git-gutter-mode +1)
+
+(unless (file-exists-p "~/.emacs.d/tmp/tramp-autosaves/")
+  (make-directory "~/.emacs.d/tmp/tramp-autosaves/" t))
+(setq tramp-auto-save-directory "~/.emacs.d/tmp/tramp-autosaves/")

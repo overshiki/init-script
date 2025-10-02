@@ -1,9 +1,12 @@
 #lang racket 
+(require "../lib.rkt")
+(require racket/cmdline)
+(require racket/match)
 
 (define sys "none")
 (define country "none")
 (command-line
- #:program "emacs-install"
+ #:program "ghcup-install"
  #:once-each
  [("-s") s "system" (set! sys s)]
  [("-c") c "country" (set! country c)]
@@ -13,11 +16,15 @@
   ("ubuntu"
    (begin
      (display "ubuntu linux")
-     (system "sudo apt-get install -y libgmp-dev")))
+     ;; (system "sudo apt-get install -y libgmp-dev")
+     (apt-get "libgmp-dev")
+     ))
   ("rocky"
    (begin
      (display "rocky linux")
-     (system "sudo yum install -y gmp-devel")))
+     ;; (system "sudo yum install -y gmp-devel")
+     (yum-install "gmp-devel")
+     ))
   (_
    (display "system not recognized")))
 

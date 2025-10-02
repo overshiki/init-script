@@ -1,4 +1,5 @@
 #lang racket
+(require "../lib.rkt")
 
 ; (define version "5.4.0")
 (define version "5.2.2")
@@ -11,21 +12,21 @@
   "wget -c https://gitlab.com/siesta-project/siesta/-/releases/" version "/downloads/siesta-" version ".tar.gz"))
 (system (string-append
   "tar xzvf siesta-" version ".tar.gz"))
-(system "apt-get install -y gfortran pkg-config libblas-dev liblapack-dev libreadline-dev cmake libomp-dev")
 
-(if (directory-exists? build-dir)
-  ; then
-  '()
-  ; else
-  (make-directory build-dir)
-)
+(apt-get
+ "gfortran"
+ "pkg-config"
+ "libblas-dev"
+ "liblapack-dev"
+ "libreadline-dev"
+ "cmake"
+ "libomp-dev")
 
-(system (string-append 
-  "cd " siesta-dir
-  " && "
+(mkdir build-dir)
+
+(system
+ (chain
+  (string-append "cd " siesta-dir)
   "cmake -S. -B_build -DCMAKE_INSTALL_PREFIX=./build -DBLAS_LIBRARY=blas -DBLAS_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DLAPACK_LIBRARY=lapack -DLAPACK_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSIESTA_WITH_OPENMP=ON"
-  " && "
   "cmake --build _build -j4"
-  " && "
-  "cmake --install _build"
-))
+  "cmake --install _build"))
