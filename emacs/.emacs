@@ -18,7 +18,7 @@
         highlight-indent-guides
         swiper-helm
         lsp-haskell
-        ;; doom-themes
+        doom-themes
         go-mode
         haskell-mode
         futhark-mode
@@ -68,7 +68,7 @@
 ;;     (auto-complete-mode 1)))
 
 ;; I prefer no theme in the end
-;; (load-theme 'doom-dark+)
+(load-theme 'doom-dark+)
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
@@ -80,7 +80,7 @@
     (highlight-parentheses-mode t)))
 (global-highlight-parentheses-mode t)
 
-;; (global-hl-line-mode 1)
+(global-hl-line-mode 1)
 ;; (set-face-attribute 'hl-line nil :foreground nil)
 (global-display-line-numbers-mode 1)
 
