@@ -7,6 +7,8 @@
 (provide yum-install)
 (provide mkdir)
 (provide read-system)
+(provide memory)
+(provide get-os)
 
 (define (string-chain sep xs)
   (match xs
@@ -109,6 +111,28 @@
          )
     (process-memory jl)))
 
+(define (get-os)
+  (define (read-os-line p)
+    (let ([line (read-line p)])
+      (cond
+        [(eof-object? line) nothing]
+        [(start-with line #:prefix "NAME") (just line)]
+        [else (read-os-line p)])))
+  (define (get-os-line)
+    (let ([p (open-input-file "/etc/os-release" #:mode 'text)])
+      (read-os-line p)))
+  (let* ([jline (get-os-line)]
+         [line (match jline
+                 [(just line) line]
+                 [nothing (raise 'failed #t)])
+                 ]
+         )
+    (match (chunk-prefix line #:prefix "NAME=")
+      ["\"Ubuntu\"" 'ubuntu]
+      ["\"Rocky\"" 'rocky]
+      [_ (raise 'failed #t)])))
+
 
 ;; (display (memory))
 ;; (newline)
+;; (get-os)

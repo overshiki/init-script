@@ -3,23 +3,25 @@
 (require racket/cmdline)
 (require racket/match)
 
-(define sys "none")
+;; (define sys "none")
 (define country "none")
 (command-line
  #:program "ghcup-install"
  #:once-each
- [("-s") s "system" (set! sys s)]
+ ;; [("-s") s "system" (set! sys s)]
  [("-c") c "country" (set! country c)]
  )
 
+(define sys (get-os))
+
 (match sys
-  ("ubuntu"
+  ('ubuntu
    (begin
      (display "ubuntu linux")
      ;; (system "sudo apt-get install -y libgmp-dev")
      (apt-get "libgmp-dev")
      ))
-  ("rocky"
+  ('rocky
    (begin
      (display "rocky linux")
      ;; (system "sudo yum install -y gmp-devel")

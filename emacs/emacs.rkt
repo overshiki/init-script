@@ -2,14 +2,16 @@
 (require racket/cmdline)
 (require racket/match)
 
-(define sys "none")
+;; (define sys "none")
 (define mode "none")
 (command-line
    #:program "emacs-install"
    #:once-each
-   [("-s") s "system" (set! sys s)]
+   ;; [("-s") s "system" (set! sys s)]
    [("-m") m "full" (set! mode m)]
    )
+
+(define sys (get-os))
 
 (define is-post
   (match mode
@@ -20,12 +22,12 @@
 
 (when (not is-post) 
    (match sys
-     ("ubuntu"
+     ('ubuntu
       (begin
         (display "ubuntu linux")
         (system "sudo apt-get update")
         (system "sudo apt-get install -y libgnutls28-dev libtinfo-dev pkg-config libgccjit-12-dev")))
-     ("rocky"
+     ('rocky
       (begin
         (display "rocky linux")
         (system "sudo yum install -y gnutls pkg-config gnutls-devel ncurses-devel zlib zlib-devel libgccjit libgccjit-devel")))

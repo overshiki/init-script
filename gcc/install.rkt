@@ -3,14 +3,16 @@
 (require racket/cmdline)
 (require racket/match)
 
-(define sys "none")
+;; (define sys "none")
 (define version "none")
 (command-line
  #:program "emacs-install"
  #:once-each
- [("-s") s "system" (set! sys s)]
+ ;; [("-s") s "system" (set! sys s)]
  [("-v") v "15.2.0" (set! version v)]
 )
+
+(define sys (get-os))
 
 (match version
   ("15.2.0" '())
@@ -38,7 +40,7 @@
    gcc-tar))
 
 (match sys
-  ("ubuntu"
+  ('ubuntu
    (begin
      (display "ubuntu linux")
      (apt-get
@@ -46,7 +48,7 @@
       "libmpc-dev"
       "libmpfr-dev")
      ))
-  ("rocky"
+  ('rocky
    (begin
      (display "rocky linux")
      (yum-install

@@ -1,6 +1,11 @@
 #lang racket
 (require "../lib.rkt")
 
+(define sys (get-os))
+(match sys
+  ['ubuntu '()]
+  [_ (raise 'failed #t)])
+
 ; (define version "5.4.0")
 (define version "5.2.2")
 (define (join-path x1 x2) (string-append x1 "/" x2))
