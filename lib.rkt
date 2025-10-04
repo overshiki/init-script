@@ -9,6 +9,9 @@
 (provide read-system)
 (provide memory)
 (provide get-os)
+(provide nproc)
+(provide elem?)
+(provide string-chain)
 
 (define (string-chain sep xs)
   (match xs
@@ -132,6 +135,24 @@
       ["\"Rocky\"" 'rocky]
       [_ (raise 'failed #t)])))
 
+(define (nproc)
+  (match (read-system "nproc")
+    [(list x) (string->number x)]
+    [_ (raise 'failed #t)]))
+
+(define (elem? x alist)
+  (match alist
+    [(cons xx ll) (if (equal-always? x xx)
+                      ;then
+                      #t
+                      ;else
+                      (elem? x ll))]
+    ['() #f]))
+
+
+;; (display (elem? "11.4.0" (list "12.8.0" "14.1.0" "11.4.0")))
+
+;; (display (nproc))
 
 ;; (display (memory))
 ;; (newline)

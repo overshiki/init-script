@@ -2,6 +2,7 @@
 (require "../lib.rkt")
 (require racket/cmdline)
 (require racket/match)
+(require data/maybe)
 
 ;; (define sys "none")
 (define version "none")
@@ -14,14 +15,25 @@
 
 (define sys (get-os))
 
-(match version
-  ("15.2.0" '())
-  ("14.1.0" '())
-  ("13.1.0" '())
-  ("12.1.0" '())
-  ("11.4.0" '())
-  ("10.1.0" '())
-  (_ (raise "use -v to set version; currently supported versions are: 15.2.0 11.4.0 10.1.0" #t)))
+(define version-list
+  (list
+   "15.2.0"
+   "14.1.0"
+   "13.1.0"
+   "12.1.0"
+   "11.4.0"
+   "10.1.0"))
+
+(if (elem? version version-list)
+    ;then
+    '()
+    ;else
+    (raise (string-append
+            "use -v to set version; currently supported versions are: "
+            (string-chain " " version-list)
+            "; but set: "
+            version
+            )))
 
 (define gcc-name
   (string-append
@@ -67,11 +79,21 @@
     '()
     (system (string-append "tar -xvf " gcc-tar)))
 
-(system
-  (chain
-    (string-append "cd " gcc-name)
-    "./configure --disable-multilib"
-    "make -j$nproc"))
+(let ([nthreads-limit
+      (let ([mem (memory)])
+        (cond
+          [(and (< mem 24) (>= mem 0))  (just 10)]
+          [(and (< mem 48) (>= mem 24)) (just 20)]
+          [else nothing]))])
+  (match nthreads-limit
+    [(just nth)
+     (let ([threads (number->string (min nth (nproc)))])
+     (system
+       (chain
+         (string-append "cd " gcc-name)
+         "./configure --disable-multilib"
+         (string-append "make -j" threads))))]
+    [nothing (raise 'failed #t)]))
 
 (system
  (chain
