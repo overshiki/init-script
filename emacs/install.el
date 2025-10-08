@@ -3,4 +3,4 @@
                          ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
 (package-refresh-contents)
-(package-install-file "deps/emacs-term-toggle/term-toggle.el")
+(package-install-file "deps/emacs-term-toggle/term-toggle.el")  

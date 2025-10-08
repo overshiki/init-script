@@ -44,7 +44,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(auto-complete auto-highlight-symbol cape clipmon corfu elixir-mode
+   '(auto-complete auto-highlight-symbol clipmon elixir-mode
                    futhark-mode go-mode haskell-mode
                    highlight-indent-guides highlight-parentheses jedi
                    julia-mode markdown-mode multiple-cursors
@@ -237,19 +237,19 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "<M-down>") 'move-text-down)
 
 
-;; use eglot instead
-;; ;; language servers
-;; (require 'lsp)
-;; (require 'lsp-haskell)
-;; ;; Hooks so haskell and literate haskell major modes trigger LSP setup
-;; (add-hook 'haskell-mode-hook #'lsp)
-;; (add-hook 'haskell-literate-mode-hook #'lsp)
+;; ;; use eglot instead
+;; language servers
+(require 'lsp)
+(require 'lsp-haskell)
+;; Hooks so haskell and literate haskell major modes trigger LSP setup
+(add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'haskell-literate-mode-hook #'lsp)
 
-;; ;; auto-complete
-;; (add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
-;; (add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
-;; (eval-after-load "auto-complete"
-;;   '(add-to-list 'ac-modes 'haskell-interactive-mode))
+;; auto-complete
+(add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
+(add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'haskell-interactive-mode))
 
 
 (define-key global-map (kbd "C-x p") 'previous-buffer)
@@ -270,7 +270,7 @@ This command does not push erased text to kill-ring."
 ;; (global-whitespace-mode 1)
 
 ;; https://emacs.stackexchange.com/questions/26417/custom-c-arrow-cursor-movement
-(setq separators-regexp "[\-'\"();:,.\\/?!@#%&*+=]")
+(setq separators-regexp "[\-'\"();:,.\\/?!@#%&*+=\([:blank:]*\)]")
 (defun forward-to-separator()
     "Move to the next separator like in the every NORMAL editor"
     (interactive)
@@ -292,9 +292,11 @@ This command does not push erased text to kill-ring."
 (company-mode t)  ;; auto-completion
 (add-hook 'after-init-hook 'global-company-mode)
 
-(add-hook 'haskell-mode-hook 'eglot-ensure)
-(add-hook 'haskell-cabal-mode-hook 'eglot-ensure)
-(add-hook 'racket-mode-hook 'eglot-ensure)
+;; ;; use lsp instead
+;; (add-hook 'haskell-mode-hook 'eglot-ensure)
+;; (add-hook 'haskell-cabal-mode-hook 'eglot-ensure)
+;; (add-hook 'racket-mode-hook 'eglot-ensure)
+
 
 (setopt ivy-use-selectable-prompt t)
 (global-git-gutter-mode +1)
@@ -302,3 +304,32 @@ This command does not push erased text to kill-ring."
 (unless (file-exists-p "~/.emacs.d/tmp/tramp-autosaves/")
   (make-directory "~/.emacs.d/tmp/tramp-autosaves/" t))
 (setq tramp-auto-save-directory "~/.emacs.d/tmp/tramp-autosaves/")
+
+
+;; (defun kb-scroll-up-hold-cursor ()
+;;   "Scroll up one position in file."
+;;   (interactive)
+;;   (scroll-up-command 1))
+
+;; (defun kb-scroll-down-hold-cursor ()
+;;   "Scroll down one position in file."
+;;   (interactive)
+;;   (scroll-up-command -1))
+
+;; (defun kb-scroll-up ()
+;;   "Scroll up one position in file, move cursor with the scroll."
+;;   (interactive)
+;;   (scroll-up-command -1)
+;;   (forward-line -1))
+
+;; (defun kb-scroll-down ()
+;;   "Scroll down one position in file, move cursor with the scroll."
+;;   (interactive)
+;;   (scroll-up-command 1)
+;;   (forward-line 1))
+
+;; ;; (bind-key "C-M-P"  'kb-scroll-up-hold-cursor)
+;; ;; (bind-key "C-M-N"  'kb-scroll-down-hold-cursor)
+
+;; (global-set-key (kbd "<C-M-up>") 'kb-scroll-up-hold-cursor)
+;; (global-set-key (kbd "<C-M-down>") 'kb-scroll-down-hold-cursor)

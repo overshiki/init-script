@@ -1,4 +1,5 @@
 #lang racket
+(require "../lib.rkt")
 (require racket/cmdline)
 (require racket/match)
 
@@ -15,8 +16,9 @@
 
 (define is-post
   (match mode
-    ("post" #t)
-    ("full" #f)
+    ["post" #t]
+    ["full" #f]
+    [_ (raise "need -m for mode: full || post" #t)]
     )
   )
 
@@ -50,3 +52,4 @@
 (system "emacs --script install.el")
 
 (system "cp .emacs ~/")
+

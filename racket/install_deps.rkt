@@ -1,4 +1,4 @@
 #lang racket
 
 (system
-  "raco pkg install functional-lib --auto")
+  "raco pkg install --auto functional-lib")
