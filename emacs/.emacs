@@ -270,7 +270,8 @@ This command does not push erased text to kill-ring."
 ;; (global-whitespace-mode 1)
 
 ;; https://emacs.stackexchange.com/questions/26417/custom-c-arrow-cursor-movement
-(setq separators-regexp "[\-'\"();:,.\\/?!@#%&*+=\([:blank:]*\)]")
+;; (setq separators-regexp "[\-'\"();:,.\\/?!@#%&*+=\([:blank:]*\)]")
+(setq separators-regexp "['\"();:,.\\/!@#%&*+=]")
 (defun forward-to-separator()
     "Move to the next separator like in the every NORMAL editor"
     (interactive)

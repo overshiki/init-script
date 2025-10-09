@@ -31,6 +31,7 @@
         ;; deps start 
         "melpa/popup-20250101.843.tar"
         "melpa/dash-20250312.1307.tar"
+        "melpa/shadchen-20141102.1839.tar"
         "melpa/ht-20230703.558.tar"
         ;; pkgs start 
         "melpa/company-20250911.129.tar"
