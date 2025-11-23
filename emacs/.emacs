@@ -68,7 +68,7 @@
 ;;     (auto-complete-mode 1)))
 
 ;; I prefer no theme in the end
-(load-theme 'doom-dark+)
+(load-theme 'doom-dark+ :no-confirm)
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
