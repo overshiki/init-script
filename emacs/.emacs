@@ -68,7 +68,8 @@
 ;;     (auto-complete-mode 1)))
 
 ;; I prefer no theme in the end
-(load-theme 'doom-dark+ :no-confirm)
+;; (load-theme 'doom-dark+ :no-confirm)
+(load-theme 'doom-ayu-dark :no-confirm)
 
 (tab-bar-mode t)
 (setq-default tab-width 2)
@@ -183,14 +184,21 @@ This command does not push erased text to kill-ring."
   (interactive "p")
   (delete-region (point) (progn (forward-word arg) (point))))
 
-(defun my-backward-delete-word (arg)
-  "Delete characters backward until encountering the beginning of a word.
-With argument, do this that many times.
-This command does not push erased text to kill-ring."
-  (interactive "p")
-  (my-delete-word (- arg)))
+;; (defun my-backward-delete-word (arg)
+;;   "Delete characters backward until encountering the beginning of a word.
+;; With argument, do this that many times.
+;; This command does not push erased text to kill-ring."
+;;   (interactive "p")
+;;   (my-delete-word (- arg)))
 
-(global-set-key [C-backspace] 'my-backward-delete-word)
+;; (global-set-key [C-backspace] 'my-backward-delete-word)
+
+(defun le/backward-delete-word (arg)
+  (interactive "p")
+  (delete-region (point) (progn (my-backward-word-or-other arg) (point))))
+  
+(global-set-key [C-backspace] 'le/backward-delete-word)
+
 
 
 (defun move-text-internal (arg)
@@ -245,6 +253,20 @@ This command does not push erased text to kill-ring."
 (add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'haskell-literate-mode-hook #'lsp)
 
+
+(defun haskell-format-buffer-with-ormolu ()
+  "Format the current Haskell buffer using ormolu."
+  (interactive)
+  (unless (buffer-modified-p)
+    (save-excursion
+      (shell-command-on-region (point-min) (point-max) "ormolu" (current-buffer) t))))
+
+
+(add-hook 'haskell-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'haskell-format-buffer-with-ormolu nil t)))
+
+
 ;; auto-complete
 (add-hook 'interactive-haskell-mode-hook 'ac-haskell-process-setup)
 (add-hook 'haskell-interactive-mode-hook 'ac-haskell-process-setup)
@@ -258,6 +280,7 @@ This command does not push erased text to kill-ring."
 (define-key global-map (kbd "C-x C-n") 'next-buffer)
 
 (define-key global-map (kbd "C-M-]") 'term-toggle-shell)
+(define-key global-map (kbd "C-`") 'term-toggle-shell)
 
 (define-key global-map (kbd "C-s") 'swiper-thing-at-point)
 ;; (define-key global-map (kbd "C-s") 'save-buffer)
@@ -284,10 +307,35 @@ This command does not push erased text to kill-ring."
     (let ((my-pos (re-search-backward separators-regexp)))
         (goto-char my-pos)))
 
-(global-set-key (kbd "C-<right>") 'forward-to-separator)
-(global-set-key (kbd "C-<left>") 'backward-to-separator)
-(global-set-key (kbd "M-f") 'forward-to-separator)
-(global-set-key (kbd "M-b") 'backward-to-separator)
+
+(defun my-backward-word-or-other (&optional n)
+  "Move over the preceding word or non-word characters."
+  (interactive "p")
+  (unless (bobp)
+    (if (eq ?w (char-syntax (char-before)))
+        (backward-word)
+      (skip-syntax-backward "^w"))))
+
+(defun my-forward-word-or-other ()
+  "Move over the following word or non-word characters."
+  (interactive)
+  (unless (eobp)
+    (if (eq ?w (char-syntax (char-after)))
+        (forward-word)
+      (skip-syntax-forward "^w"))))
+
+
+;; (global-set-key (kbd "C-<right>") 'forward-to-separator)
+;; (global-set-key (kbd "C-<left>") 'backward-to-separator)
+;; (global-set-key (kbd "M-f") 'forward-to-separator)
+;; (global-set-key (kbd "M-b") 'backward-to-separator)
+
+
+(global-set-key (kbd "C-<right>") 'my-forward-word-or-other)
+(global-set-key (kbd "C-<left>") 'my-backward-word-or-other)
+(global-set-key (kbd "M-f") 'my-forward-word-or-other)
+(global-set-key (kbd "M-b") 'my-backward-word-or-other)
+
 
 (ivy-mode t)
 (company-mode t)  ;; auto-completion
