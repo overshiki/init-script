@@ -103,8 +103,8 @@
 (define-key global-map (kbd "C-z") 'undo)
 (define-key global-map (kbd "C-x C-e") 'end-of-buffer)
 (define-key global-map (kbd "C-x e") 'end-of-buffer)
-(define-key global-map (kbd "C-x C-g") 'beginning-of-buffer)
-(define-key global-map (kbd "C-x g") 'beginning-of-buffer)
+(define-key global-map (kbd "C-x C-a") 'beginning-of-buffer)
+(define-key global-map (kbd "C-x a") 'beginning-of-buffer)
 
 (define-key global-map (kbd "C-j") 'comment-line)
 
@@ -193,13 +193,45 @@ This command does not push erased text to kill-ring."
 
 ;; (global-set-key [C-backspace] 'my-backward-delete-word)
 
-(defun le/backward-delete-word (arg)
-  (interactive "p")
-  (delete-region (point) (progn (my-backward-word-or-other arg) (point))))
+;; (defun le/backward-delete-word (arg)
+;;   (interactive "p")
+;;   (delete-region (point) (progn (my-backward-word-or-other arg) (point))))
+
+(defun previous-line-end-position-from (pos) 
+  (save-excursion
+    (goto-char pos)
+    (forward-line -1)
+    (end-of-line)
+    (point)))
   
-(global-set-key [C-backspace] 'le/backward-delete-word)
+(defun le/backward-kill-word-stop-at-newline (arg)
+  (interactive "p")
+  (let (
+        (start (point))
+        (stop nil)
+        (line-start (line-beginning-position))
+       )
+    ;; (forward-word -1)
+    (my-backward-word-or-other arg)
+    (setq stop (point))
+    
+    (if (save-excursion
+            (goto-char start)
+            (re-search-backward "\n" stop t))
+      ;; (setq stop (line-beginning-position 0)))
+        ;; then
+        (progn 
+          (setq stop (previous-line-end-position-from line-start))
+          ;; (goto-char (previous-line-end-position-from line-start))
+          (delete-region start stop)
+          (goto-char stop)
+          
+        )
+      ;; else
+        (delete-region start stop)
+      )))
 
-
+(global-set-key [C-backspace] 'le/backward-kill-word-stop-at-newline)
 
 (defun move-text-internal (arg)
   (cond
