@@ -44,18 +44,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(auto-complete auto-highlight-symbol clipmon elixir-mode
-                   futhark-mode go-mode haskell-mode
-                   highlight-indent-guides highlight-parentheses jedi
-                   julia-mode markdown-mode multiple-cursors
-                   racket-mode rust-mode scala-mode toggle-term tuareg)))
+   '(auto-complete auto-highlight-symbol clipmon elixir-mode futhark-mode
+                   go-mode haskell-mode highlight-indent-guides
+                   highlight-parentheses jedi julia-mode markdown-mode
+                   merlin-eldoc multiple-cursors racket-mode rust-mode
+                   scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 170 :width normal))))
- )
+ '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 170 :width normal)))))
 
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 
@@ -273,8 +272,30 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "C-S-P") 'move-text-up)
 (global-set-key (kbd "C-S-N") 'move-text-down)
 
-(global-set-key (kbd "<M-up>") 'move-text-up)
-(global-set-key (kbd "<M-down>") 'move-text-down)
+
+(global-set-key (kbd "C-S-<up>") 'move-text-up)
+(global-set-key (kbd "C-S-<down>") 'move-text-down)
+
+;; (global-set-key (kbd "<M-up>") 'move-text-up)
+;; (global-set-key (kbd "<M-down>") 'move-text-down)
+
+
+(defun kb-scroll-up-hold-cursor ()
+  "Scroll up one position in file."
+  (interactive)
+  (scroll-up-command 1))
+
+(defun kb-scroll-down-hold-cursor ()
+  "Scroll down one position in file."
+  (interactive)
+  (scroll-up-command -1))
+
+
+;; (global-set-key (kbd "M-p") 'kb-scroll-up-hold-cursor)
+;; (global-set-key (kbd "M-n") 'kb-scroll-down-hold-cursor)
+
+(global-set-key (kbd "M-<up>") 'kb-scroll-up-hold-cursor)
+(global-set-key (kbd "M-<down>") 'kb-scroll-down-hold-cursor)
 
 
 ;; ;; use eglot instead
