@@ -324,8 +324,8 @@ This command does not push erased text to kill-ring."
 ;; (global-set-key (kbd "M-p") 'kb-scroll-up-hold-cursor)
 ;; (global-set-key (kbd "M-n") 'kb-scroll-down-hold-cursor)
 
-(global-set-key (kbd "M-<up>") 'kb-scroll-up-hold-cursor)
-(global-set-key (kbd "M-<down>") 'kb-scroll-down-hold-cursor)
+(global-set-key (kbd "M-<up>") 'kb-scroll-down-hold-cursor)
+(global-set-key (kbd "M-<down>") 'kb-scroll-up-hold-cursor)
 
 
 ;; ;; use eglot instead
