@@ -204,7 +204,14 @@ This command does not push erased text to kill-ring."
     (forward-line -1)
     (end-of-line)
     (point)))
-  
+
+(defun next-line-start-position-from (pos)
+  (save-excursion
+    (goto-char pos)
+    (forward-line)
+    (beginning-of-line)
+    (point)))
+
 (defun le/backward-kill-word-stop-at-newline (arg)
   (interactive "p")
   (let (
@@ -233,6 +240,27 @@ This command does not push erased text to kill-ring."
       )))
 
 (global-set-key [C-backspace] 'le/backward-kill-word-stop-at-newline)
+
+
+(defun le/forward-word-stop-at-newline (arg)
+  (interactive "p")
+  (let (
+        (pos (point))
+        (is-end-of-line (= (point)
+                           (save-excursion
+                             (end-of-line)
+                             (point))))
+       )
+    (if (save-excursion
+        (forward-word)
+        (re-search-backward "\n" pos t))
+        ;; then
+        (if is-end-of-line
+            (goto-char (next-line-start-position-from (point)))
+            (end-of-line))
+      ;; else
+      (forward-word)
+      )))
 
 (defun move-text-internal (arg)
   (cond
@@ -388,9 +416,11 @@ This command does not push erased text to kill-ring."
 ;; (global-set-key (kbd "M-b") 'backward-to-separator)
 
 
-(global-set-key (kbd "C-<right>") 'my-forward-word-or-other)
+;; (global-set-key (kbd "C-<right>") 'my-forward-word-or-other)
+(global-set-key (kbd "C-<right>") 'le/forward-word-stop-at-newline)
 (global-set-key (kbd "C-<left>") 'my-backward-word-or-other)
-(global-set-key (kbd "M-f") 'my-forward-word-or-other)
+;; (global-set-key (kbd "M-f") 'my-forward-word-or-other)
+(global-set-key (kbd "M-f") 'le/forward-word-stop-at-newline)
 (global-set-key (kbd "M-b") 'my-backward-word-or-other)
 
 
