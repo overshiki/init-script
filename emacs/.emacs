@@ -471,3 +471,5 @@ This command does not push erased text to kill-ring."
 ;; (global-set-key (kbd "<C-M-down>") 'kb-scroll-down-hold-cursor)
 
 (setq inhibit-startup-screen t)
+
+(merlin-eldoc-setup)
