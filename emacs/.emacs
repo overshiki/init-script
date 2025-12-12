@@ -31,6 +31,7 @@
         scala-mode
         counsel
         merlin-eldoc
+        git-gutter 
         ))
 
 (package-initialize)
@@ -93,6 +94,7 @@
 (global-auto-highlight-symbol-mode t)
 
 ;; (define-key global-map (kbd "C-;") 'comment-line)
+
 
 (defun end-of-line-and-indented-new-line ()
   (interactive)
