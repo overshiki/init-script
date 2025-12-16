@@ -74,7 +74,11 @@
 (load-theme 'doom-ayu-dark :no-confirm)
 
 (tab-bar-mode t)
-(setq-default tab-width 2)
+
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2
+              standard-indent 2
+              )
 
 (require 'highlight-parentheses)
 (define-globalized-minor-mode global-highlight-parentheses-mode
@@ -374,8 +378,9 @@ This command does not push erased text to kill-ring."
 
 (define-key global-map (kbd "C-k") 'kill-line)
 (define-key global-map (kbd "M-k") 'kill-region)
-(global-set-key (kbd "TAB") 'tab-to-tab-stop)
-(setq-default indent-tabs-mode nil)
+;; (global-set-key (kbd "TAB") 'tab-to-tab-stop)
+(global-set-key (kbd "TAB") (lambda () (interactive) (insert "  ")))
+;; (setq-default indent-tabs-mode nil)
 								
 ;; (global-whitespace-mode 1)
 
