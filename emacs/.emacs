@@ -31,7 +31,6 @@
         scala-mode
         counsel
         merlin-eldoc
-        git-gutter 
         ))
 
 (package-initialize)
@@ -49,9 +48,9 @@
  '(package-selected-packages
    '(auto-complete auto-highlight-symbol clipmon elixir-mode futhark-mode
                    go-mode haskell-mode highlight-indent-guides
-                   highlight-parentheses jedi julia-mode markdown-mode
-                   merlin-eldoc multiple-cursors racket-mode rust-mode
-                   scala-mode toggle-term tuareg)))
+                   highlight-parentheses jedi julia-mode lsp-ui
+                   markdown-mode merlin-eldoc multiple-cursors
+                   racket-mode rust-mode scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -98,7 +97,6 @@
 (global-auto-highlight-symbol-mode t)
 
 ;; (define-key global-map (kbd "C-;") 'comment-line)
-
 
 (defun end-of-line-and-indented-new-line ()
   (interactive)
@@ -334,6 +332,7 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "M-<down>") 'kb-scroll-up-hold-cursor)
 
 
+;; lsp
 ;; ;; use eglot instead
 ;; language servers
 (require 'lsp)
@@ -362,6 +361,30 @@ This command does not push erased text to kill-ring."
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'haskell-interactive-mode))
 
+
+
+(use-package lsp-mode
+  :hook (python-mode . lsp)
+  :config
+  (setq lsp-pyls-server-command '("pylsp")))
+
+
+(add-hook 'flymake-mode-hook
+          (lambda ()
+            (setq flymake-suppress-zero-counters t)
+            (setq flymake-start-on-flymake-mode t)
+            (flymake-mode 1)))
+
+(use-package lsp-ui
+  :after lsp-mode
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-sideline-enable t
+        lsp-ui-sideline-show-diagnostics t
+        lsp-ui-sideline-diagnostic-max-lines 3
+        lsp-ui-sideline-delay 0.5))
+            
+          
 
 (define-key global-map (kbd "C-x p") 'previous-buffer)
 (define-key global-map (kbd "C-x n") 'next-buffer)
