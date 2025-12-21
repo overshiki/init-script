@@ -72,6 +72,23 @@
 ;; (load-theme 'doom-dark+ :no-confirm)
 (load-theme 'doom-ayu-dark :no-confirm)
 
+;; (use-package dired+
+;;   :ensure t
+;;   :config
+;;   (setq diredp-hide-details-flag nil)
+;;   (diredp-toggle-find-file-relation)
+;;   (diredp-toggle-automatic-preview-mode)
+;;   (diredp-toggle-highlight-autofiles-mode))
+
+(use-package diredfl
+  :ensure t
+  :hook (dired-mode . diredfl-mode))
+
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(setq inhibit-startup-message t)
+
+
 (tab-bar-mode t)
 
 (setq-default indent-tabs-mode nil)
