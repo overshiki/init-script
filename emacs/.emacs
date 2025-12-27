@@ -46,11 +46,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(auto-complete auto-highlight-symbol clipmon elixir-mode futhark-mode
-                   go-mode haskell-mode highlight-indent-guides
-                   highlight-parentheses jedi julia-mode lsp-ui
-                   markdown-mode merlin-eldoc multiple-cursors
-                   racket-mode rust-mode scala-mode toggle-term tuareg)))
+   '(auto-complete auto-highlight-symbol clipmon company-coq diredfl
+                   elixir-mode futhark-mode go-mode haskell-mode
+                   highlight-indent-guides highlight-parentheses jedi
+                   julia-mode jupyter lsp-ui markdown-mode
+                   merlin-eldoc multiple-cursors racket-mode rust-mode
+                   scala-mode toggle-term tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -330,25 +331,6 @@ This command does not push erased text to kill-ring."
 ;; (global-set-key (kbd "<M-up>") 'move-text-up)
 ;; (global-set-key (kbd "<M-down>") 'move-text-down)
 
-
-(defun kb-scroll-up-hold-cursor ()
-  "Scroll up one position in file."
-  (interactive)
-  (scroll-up-command 1))
-
-(defun kb-scroll-down-hold-cursor ()
-  "Scroll down one position in file."
-  (interactive)
-  (scroll-up-command -1))
-
-
-;; (global-set-key (kbd "M-p") 'kb-scroll-up-hold-cursor)
-;; (global-set-key (kbd "M-n") 'kb-scroll-down-hold-cursor)
-
-(global-set-key (kbd "M-<up>") 'kb-scroll-down-hold-cursor)
-(global-set-key (kbd "M-<down>") 'kb-scroll-up-hold-cursor)
-
-
 ;; lsp
 ;; ;; use eglot instead
 ;; language servers
@@ -467,8 +449,10 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "C-<right>") 'le/forward-word-stop-at-newline)
 (global-set-key (kbd "C-<left>") 'my-backward-word-or-other)
 ;; (global-set-key (kbd "M-f") 'my-forward-word-or-other)
-(global-set-key (kbd "M-f") 'le/forward-word-stop-at-newline)
-(global-set-key (kbd "M-b") 'my-backward-word-or-other)
+(global-set-key (kbd "M-f") 'forward-char)
+(global-set-key (kbd "C-f") 'le/forward-word-stop-at-newline)
+(global-set-key (kbd "M-b") 'backward-char)
+(global-set-key (kbd "C-b") 'my-backward-word-or-other)
 
 
 (ivy-mode t)
@@ -516,6 +500,27 @@ This command does not push erased text to kill-ring."
 
 ;; (global-set-key (kbd "<C-M-up>") 'kb-scroll-up-hold-cursor)
 ;; (global-set-key (kbd "<C-M-down>") 'kb-scroll-down-hold-cursor)
+
+(defun kb-scroll-up-hold-cursor ()
+  "Scroll up one position in file."
+  (interactive)
+  (scroll-up-command 1)
+  (forward-line 1))
+
+(defun kb-scroll-down-hold-cursor ()
+  "Scroll down one position in file."
+  (interactive)
+  (scroll-up-command -1)
+  (forward-line -1))
+
+
+;; (global-set-key (kbd "M-p") 'kb-scroll-up-hold-cursor)
+;; (global-set-key (kbd "M-n") 'kb-scroll-down-hold-cursor)
+
+(global-set-key (kbd "M-<up>") 'kb-scroll-down-hold-cursor)
+(global-set-key (kbd "M-<down>") 'kb-scroll-up-hold-cursor)
+
+
 
 (setq inhibit-startup-screen t)
 
