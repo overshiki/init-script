@@ -57,7 +57,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 170 :width normal)))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 180 :width normal)))))
 
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 
@@ -520,6 +520,8 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "M-<up>") 'kb-scroll-down-hold-cursor)
 (global-set-key (kbd "M-<down>") 'kb-scroll-up-hold-cursor)
 
+(global-set-key (kbd "M-w") 'kill-region)
+(global-set-key (kbd "C-w") 'kill-ring-save)
 
 
 (setq inhibit-startup-screen t)
