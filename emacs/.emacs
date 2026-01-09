@@ -29,8 +29,11 @@
         markdown-mode
         elixir-mode
         scala-mode
+        transpose-frame
+        matlab-mode
         counsel
         merlin-eldoc
+        gruber-darker-theme
         ))
 
 (package-initialize)
@@ -45,19 +48,27 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(doom-ayu-dark))
+ '(custom-safe-themes
+   '("73ae9ba31609c7cb11be2012f06ffb5e3c9c34886ea60cc9c2a72e4e2a281ddb"
+     "9b9d7a851a8e26f294e778e02c8df25c8a3b15170e6f9fd6965ac5f2544ef2a9"
+     default))
  '(package-selected-packages
    '(auto-complete auto-highlight-symbol clipmon company-coq diredfl
-                   elixir-mode futhark-mode go-mode haskell-mode
+                   elixir-mode futhark-mode go-mode
+                   gruber-darker-theme haskell-mode
                    highlight-indent-guides highlight-parentheses jedi
-                   julia-mode jupyter lsp-ui markdown-mode
+                   julia-mode jupyter lsp-ui markdown-mode matlab-mode
                    merlin-eldoc multiple-cursors racket-mode rust-mode
-                   scala-mode toggle-term tuareg)))
+                   scala-mode toggle-term transpose-frame tuareg)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 180 :width normal)))))
+ ;; '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 180 :width normal))))
+ '(default ((t (:family "Ubuntu Mono" :foundry "DAMA" :slant normal :weight normal :height 180 :width normal))))
+ '(hl-line ((t (:extend t :background "#131721")))))
 
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 
@@ -71,7 +82,8 @@
 
 ;; I prefer no theme in the end
 ;; (load-theme 'doom-dark+ :no-confirm)
-(load-theme 'doom-ayu-dark :no-confirm)
+;; (load-theme 'doom-ayu-dark :no-confirm)
+(load-theme 'gruber-darker :no-confirm)
 
 ;; (use-package dired+
 ;;   :ensure t
@@ -455,7 +467,10 @@ This command does not push erased text to kill-ring."
 (global-set-key (kbd "C-b") 'my-backward-word-or-other)
 
 
-(ivy-mode t)
+;; (ivy-mode t)
+(require 'ido)
+(ido-mode t)
+
 (company-mode t)  ;; auto-completion
 (add-hook 'after-init-hook 'global-company-mode)
 
@@ -522,8 +537,23 @@ This command does not push erased text to kill-ring."
 
 (global-set-key (kbd "M-w") 'kill-region)
 (global-set-key (kbd "C-w") 'kill-ring-save)
-
+(global-set-key (kbd "C-v") 'yank)
 
 (setq inhibit-startup-screen t)
+
+(let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+ (when (and opam-share (file-directory-p opam-share))
+  ;; Register Merlin
+  (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+  (autoload 'merlin-mode "merlin" nil t nil)
+  ;; Automatically start it in OCaml buffers
+  (add-hook 'tuareg-mode-hook 'merlin-mode t)
+  (add-hook 'caml-mode-hook 'merlin-mode t)
+  ;; Use opam switch to lookup ocamlmerlin binary
+  (setq merlin-command 'opam)
+  ;; To easily change opam switches within a given Emacs session, you can
+  ;; install the minor mode https://github.com/ProofGeneral/opam-switch-mode
+  ;; and use one of its "OPSW" menus.
+  ))
 
 (merlin-eldoc-setup)

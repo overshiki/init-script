@@ -12,3 +12,5 @@ cuquantum/cuquantum-*
 glibc/glibc-*
 openmpi/openmpi-*
 megaparsack/megaparsack
+libtorch/*.zip
+libtorch/libtorch
